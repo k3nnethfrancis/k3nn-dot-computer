@@ -1,0 +1,67 @@
+  :root {
+    --bg-color: #f5f5f5;
+    --text-color: #333;
+    --accent-color: #4a4a4a;
+    --highlight: #E63946; /* Keeping the muted red for highlights */
+    --border-color: #e0e0e0;
+    --text-secondary: #666;
+}
+  
+  body {
+    /* font-family: 'Inter', sans-serif; New font */
+    font-family: 'JetBrains Mono', monospace;
+    line-height: 1.6;
+    color: var(--text-primary);
+    background-color: var(--background);
+    margin: 0;
+    padding: 40px 20px;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+  }
+  
+  .content-wrapper {
+    max-width: 700px;
+    width: 100%;
+  }
+  
+  main {
+    max-width: 800px;
+    width: 100%;
+    margin: 0 auto;
+  }
+  
+  h1, h2 {
+    color: var(--text-primary);
+    margin-bottom: 20px;
+    font-weight: 600;
+  }
+  
+  h2::before {
+    content: none; /* Remove the ">" prefix */
+  }
+  
+  a {
+    color: var(--link-color);
+    text-decoration: none;
+    border-bottom: 1px solid var(--border-color);
+    transition: color 0.3s ease, border-bottom-color 0.3s ease;
+  }
+  
+  a:hover {
+    color: var(--highlight);
+    border-bottom-color: var(--highlight);
+    text-decoration: none !important; /* Add this line */
+  }
+  
+  /* Remove CRT effect and scanlines */
+  .crt-effect, body::after {
+    display: none;
+  }
+  
+  hr {
+    border: none;
+    border-top: 1px solid var(--border-color);
+    margin: 30px 0;
+  }

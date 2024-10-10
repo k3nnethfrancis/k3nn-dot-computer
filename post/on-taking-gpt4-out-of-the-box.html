@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>shoshin</title>
+    <!-- Add JetBrains Mono font -->
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/styles.css">
+    
+<link rel="stylesheet" href="/static/css/post.css">
+
+    <link rel="icon" type="image/x-icon" href="/static/images/favicon/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/images/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/images/favicon/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/images/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/static/images/favicon/android-chrome-192x192.png">
+    <link rel="manifest" href="/static/images/favicon/site.webmanifest">
+    <!-- End of favicon links -->
+</head>
+<body>
+    <div class="content-wrapper">
+        
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>On taking gpt-4 out of the box - shoshin.blog</title>
+    <link rel="stylesheet" href="/static/css/post.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css" integrity="sha384-vKruj+a13U8yHIkAyGgK1J3ArTLzrFGBbBc0tDp4ad/EyewESeXE/Iv67Aj8gKZ0" crossorigin="anonymous">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js" integrity="sha384-PwRUT/YqbnEjkZO0zZxNqcxACrXe+j766U2amXcgMg5457rve2Y7I6ZJSm2A0mS4" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "$$", right: "$$", display: true},
+                    {left: "$", right: "$", display: false},
+                    {left: "\\(", right: "\\)", display: false},
+                    {left: "\\[", right: "\\]", display: true}
+                ]
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="content-wrapper">
+        <div class="post-container">
+            <article class="blog-post">
+                <header>
+                    <nav>
+                        <a href="/">home</a> / <a href="/blog.html">blog</a>
+                    </nav>
+                    <h1 class="post-title">> On taking gpt-4 out of the box</h1>
+                    <div class="post-metadata">
+                        2023-05-02 | ai, philosophy | 7 minutes
+                    </div>
+                </header>
+                
+                <img src="/static/images/posts/on-taking-gpt4-out-of-the-box.png" alt="On taking gpt-4 out of the box" class="post-image">
+                
+                <div class="post-content">
+                    <p>Microsoft researchers claim OpenAI's latest model has the 'sparks of AGI'. I think when we look back at this time it will seem obvious. It probably won't ever be clear-cut, but GPT-4's capacity to generalize over almost anything in the form of text doesn't look like narrow intelligence to me. At the same time, it's possible that stacking more layers onto the underlying neural network might not be needed for fully realizing artificial general intelligence.</p>
+<p>Microsoft researchers, in their extensive paper, "Sparks of artificial general intelligence: early experiments with GPT-4,"<sup id="fnref:2-1"><a class="footnote-ref" href="#fn:2-1">1</a></sup> make a compelling case for why GPT-4 may have crossed a key threshold.</p>
+<p>[If you are skeptical of these claims and haven't read or skimmed it, I would suggest at least watching this to get up to speed.]</p>
+<p>The experiments they conducted, however, all occurred inside GPT-4's box. That is, they chatted with GPT-4 but did not integrate it with external systems. They, rightfully, assessed its base intelligence.</p>
+<p>In this essay, I'll explore the engineering paradigms aimed at taking GPT-4 out of its box and augmenting its intelligence. In effect, this allows us to build AI systems capable of operating in the world and generalizing to a growing set of domains. As this paradigm continues to develop, we'll eventually achieve PASTA: a process for automating scientific and technological advancement<sup id="fnref:2-2"><a class="footnote-ref" href="#fn:2-2">2</a></sup>, for which we'll look at some early signs. I'll conclude with a brief discussion on the implications for AI safety.</p>
+<h2>Key limitations of the base model: Does GPT-4 Need a System II?</h2>
+<p>Microsoft's research highlights GPT-4's inability to plan as a key limitation of its intelligence. I think this is an important point because their consensus definition of intelligence<sup id="fnref:2-3"><a class="footnote-ref" href="#fn:2-3">3</a></sup> explicitly includes planning ability. In this sense, GPT-4 falls short.</p>
+<p>That said, this perspective might be limiting. To draw an analogy, consider Daniel Kahneman's two modes of thought: System 1 and System 2.</p>
+<p>System 1 is characterized as fast, intuitive, and automatic, while System 2 is slower, deliberate, and analytical. We can think of GPT-4's inability to plan as a problem with its confinement as a System 1 machine, excelling in rapid cognition but struggling with planning and reasoning, which are hallmarks of System 2 thinking <sup id="fnref:2-4"><a class="footnote-ref" href="#fn:2-4">4</a></sup>.</p>
+<p>My guess is this has to do with GPT models being autoregressive transformers, able to use context and self-attention to predict the next token but unable to produce a final state without first achieving all prior states. In other words, planning requires backwards-reasoning, which is contradictory to the nature of the underlying architecture.</p>
+<p>The question arises: can we engineer a pseudo-System II for GPT-4?</p>
+<p>Intelligence augmentation: getting out of the box
+As of today, there seem to be three major paradigms for augmenting GPT-4's intelligence and taking it out of the box. These are: context injection, recursive prompting, and toolformers. I explain these in more detail below. From them, many other applications are possible from simulations and self-correcting systems to autonomous agents; all of which can be built with an OpenAI API key and a recent version of Python installed.</p>
+<p>Context injection involves processing document embeddings, storing them in a vector database, and semantically searching over them to query more relevant information given a prompt. When applied to GPT-4, this looks like modifying the prompt with additional context to produce better responses. Context injection can also be used to provide external memory stores for GPT-4, allowing it to remember things far outside its context window.</p>
+<p>source: pinecone
+Recursive prompting involves having GPT-4 loop over its previous context, possibly using another model to summarize it or pick out key relevant points, and then using context injection to add that to the next prompt. This process is repeated until it reaches a final answer to a question or task. This process can be built up from a System 1 machine to a coherent planning system, even if the base model itself isn't responsible for the entirety of the process.</p>
+<p>source: yohei nakajima
+Toolformers are transformer models that can use tools. It is a term coined by Meta AI researchers in their paper "Toolformer: language models can teach themselves to use tools" <sup id="fnref:2-5"><a class="footnote-ref" href="#fn:2-5">5</a></sup> to describe the process of teaching transformer models to call APIs with natural language. In effect, this enables LLMs to execute arbitrary tasks on the condition they can be executed via an API call.</p>
+<p>Combined, recursive prompting and context injection effectively form a pseudo-system 2 for GPT-4. While toolformers, on the other hand, represent the final reagent for developing AI systems that can operate in the world.</p>
+<h2>Agent systems: from thinkers to doers</h2>
+<p>Early agent systems work by wrapping a pseudo-system 2 around the base model. By recursively prompting GPT-4 and injecting relevant context from external memory stores, we get plans, subgoals, and tasks as output.</p>
+<p>It turns out the implementation for this is fairly simple too, as demonstrated with babyAGI, a project by Yohei Nakajima who did it with 138 lines of Python code.</p>
+<p>If that wasn't impressive [or concerning] enough, the part of the program that runs the recursive loop is only 35 lines:</p>
+<p>At the time of me writing this, Yohei has released an update that enables babyAGI to execute on these tasks using APIs as tools. There is also LangChain, a popular Python library for building applications with LLMs, with a page dedicated to the implementation of agents including Python notebook tutorials on babyAGI and AutoGPT—another popular implementation.</p>
+<p>In my view, these early agentGPT systems have clearly demonstrated planning abilities. But their implications just keep unfolding. It's one thing to have an agent that can make plans, but an entirely different thing when the agent can execute tasks, which is exactly what toolformers enable. OpenAI's recent launch of ChatGPT plugins should serve as confirmation that the floodgates to a world of possibilities have been opened.</p>
+<h2>Research agents</h2>
+<p>The application space I'm most excited about is research: agentic AI systems designed to conduct parts or all of a research work stream. One project by Eimen Hamedat called autoresearcher is an early example. Autoresearcher takes a research question and searches Semantic Scholar for relevant papers, summarizes them, then synthesizes it all in a final output.</p>
+<p>While still a rather simple system, it's clear that automating the process of literature reviews could save enormous amounts of time. But other parts of the scientific research process are far more complex, and I could see how, to some people, fully automating the process might seem like a long shot.</p>
+<p>Consider a recent paper titled, "Emergent autonomous scientific research capabilities of large language models" <sup id="fnref:2-6"><a class="footnote-ref" href="#fn:2-6">6</a></sup>, which demonstrated how GPT-4 was able to plan and leverage tools to conduct a chemistry experiment. This work from Carnegie Mellon's Chemistry department, in my view, may have the sparks for PASTA—Process for Automating Scientific and Technological Advancement—a term coined by Holden Karnofsky, in his blog, Cold Takes.</p>
+<p>I was blown away by this. To me, PASTA represents the holy grail. But there is still plenty of work to do. For one, APIs don't exist for conducting any arbitrary scientific experiment. Scientists and researchers who want to integrate AI into their workflows will have to build API wrappers around their stack, assuming they are writing code for their work, which represents another hurdle that science has yet to overcome. Though automation is a great economic incentive and I think it's likely that it pushes scientific research towards this direction. There are fields like chemistry and biology that tend to be more adapted to these tools, which I think will serve as examples for other scientific disciplines.</p>
+<p>Like the rest of science as it adopts these tools, things will start off slow; first by automating low-hanging-fruit tasks then by compounding those automations. Automated scientific research and discovery will accelerate human progress at a rate unimaginable to us today. This could mean curing all diseases, solving the climate crisis, free energy, and colonies on Mars. While there is plenty of hope for what we could achieve if things go well, the reality is there's loads of uncertainty too. Things going wrong could mean serious consequences for humanity.<sup id="fnref:2-7"><a class="footnote-ref" href="#fn:2-7">7</a></sup></p>
+<p>Doing this safely
+Building AI systems that can pursue goals reliably in the world isn't trivial, but it doesn't seem like we'll be able to keep people from developing them. As pointed out by Zvi, the development of agent systems comes with important safety concerns.</p>
+<p>A critical issue lies in determining when we cross the threshold into dangerous territory: when do these AI systems become unsafe? A confined GPT-4 model may not seem threatening, but once it starts operating autonomously and engaging with the world through APIs, the potential for harm can't be ignored. Malicious users may design systems with harmful goals or even well-intended, unmonitored systems may unintentionally produce harmful subgoals. With economic incentives high, we should expect many agents to be developed over the next several years, with most being designed for good intent but a substantial number built for nefarious purposes like phishing scams and propaganda machines.</p>
+<p>On the other hand, agent systems have the potential to help solve key problems in AI safety research. For instance, using agent-based simulations could allow researchers to test the risks and limitations of these systems in a safe environment before deploying them in the wild. Agents systems have also been proposed as solutions to alignment, such Iterated Distillation and Amplification (IDA), which propose a multi-agent system that recursively aligns itself with the help of other agents <sup id="fnref:2-9"><a class="footnote-ref" href="#fn:2-9">9</a></sup>. I am hopeful about both of these lines of research.</p>
+<p>Weighing the risks and benefits, there seem to be good reasons to be optimistic. I expect base models like GPT-4 to be sufficiently aligned by their governing organizations such as OpenAI, limiting the possibilities for harmful outcomes. However, as models become more powerful or reinforcement learning unintentionally optimizes for undesirable outcomes, the base model's alignment may become less reliable, especially when giving the AI a pseudo-system 2 and taking it out of the box.</p>
+<p>Fortunately, these are programs that can be monitored and intervened upon if they exhibit harmful behavior. Since many AI systems rely on APIs, we can expect organizations like OpenAI and other organizations to engage in proactive monitoring and take necessary precautions. That said, if open source models start to become powerful enough, we may no longer be able to rely on corporations to help monitor misuse.</p>
+<p>Ultimately, AI agent systems have the potential to revolutionize many aspects of our lives, but their development must be pursued with a keen eye on safety. If you are developing these systems, you have a responsibility to the human race to exercise caution and minimize harm. These are crucial steps we must take in harnessing the benefits of what may be the most important technology we have ever created.</p>
+<h3>Notes</h3>
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:2-1">
+<p>Bubeck, S., Chandrasekaran, V., Eldan, R., Gehrke, J., Horvitz, E., Kamar, E., ... &amp; Zhang, Y. (2023). Sparks of artificial general intelligence: Early experiments with gpt-4. arXiv preprint arXiv:2303.12712&#160;<a class="footnote-backref" href="#fnref:2-1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+<li id="fn:2-2">
+<p>Karnofsky, Holden. (2021). Forecasting Transformative AI, Part 1: What Kind of AI?&#160;<a class="footnote-backref" href="#fnref:2-2" title="Jump back to footnote 2 in the text">&#8617;</a></p>
+</li>
+<li id="fn:2-3">
+<p>The consensus definition of intelligence used in Microsoft research comes from this statement which was drafted in 1994. Includes signatures from expert academics from universities across the U.S. It should be noted that it was sent to 131 researchers described as "experts in intelligence and allied fields". Of these, 52 signed the statement, 48 returned the request with an explicit refusal to sign, and 31 ignored the request. In 1996 the president of the American Psychological Association claimed only 10 of the signatures where from actual intelligence experts. However, the statement contains many controversial claims and, in my view their definition of intelligence is the least of t "Intelligence is a very general mental capability that, among other things, involves the ability to reason, plan, solve problems, think abstractly, comprehend complex ideas, learn quickly and learn from experience. It is not merely book learning, a narrow academic skill, or test-taking smarts. Rather, it reflects a broader and deeper capability for comprehending our surroundings—"catching on," "making sense" of things, or "figuring out" what to do."&#160;<a class="footnote-backref" href="#fnref:2-3" title="Jump back to footnote 3 in the text">&#8617;</a></p>
+</li>
+<li id="fn:2-4">
+<p>A good post from Farnam Street on System 1 and System 2 thinking.&#160;<a class="footnote-backref" href="#fnref:2-4" title="Jump back to footnote 4 in the text">&#8617;</a></p>
+</li>
+<li id="fn:2-5">
+<p>Schick, T., Dwivedi-Yu, J., Dessì, R., Raileanu, R., Lomeli, M., Zettlemoyer, L., &amp; Scialom, T. (2023). Toolformer: Language models can teach themselves to use tools. arXiv preprint arXiv:2302.04761.&#160;<a class="footnote-backref" href="#fnref:2-5" title="Jump back to footnote 5 in the text">&#8617;</a></p>
+</li>
+<li id="fn:2-6">
+<p>Boiko, D. A., MacKnight, R., &amp; Gomes, G. (2023). Emergent autonomous scientific research capabilities of large language models. arXiv preprint arXiv:2304.05332.&#160;<a class="footnote-backref" href="#fnref:2-6" title="Jump back to footnote 6 in the text">&#8617;</a></p>
+</li>
+<li id="fn:2-7">
+<p>Overview of the AI alignment problem.&#160;<a class="footnote-backref" href="#fnref:2-7" title="Jump back to footnote 7 in the text">&#8617;</a></p>
+</li>
+<li id="fn:2-8">
+<p>Post on the implications of agents like AutoGPT.&#160;<a class="footnote-backref" href="#fnref:2-8" title="Jump back to footnote 8 in the text">&#8617;</a></p>
+</li>
+<li id="fn:2-9">
+<p>Post about forecasting AI science capabilities.&#160;<a class="footnote-backref" href="#fnref:2-9" title="Jump back to footnote 9 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
+                </div>
+                
+                
+                
+                <footer>
+                    <p><a href="/blog.html" class="back-link">> blog_</a></p>
+                </footer>
+            </article>
+        </div>
+    </div>
+</body>
+</html>
+
+    </div>
+    
+</body>
+</html>

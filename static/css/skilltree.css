@@ -1,0 +1,155 @@
+.skill-tree {
+    font-family: monospace;
+    color: #a0a0a0;
+    padding: 20px;
+    overflow-x: auto;
+}
+
+.skill-tree ul {
+    padding: 20px 0 0 0;
+    position: relative;
+    transition: all 0.5s;
+    margin-left: 0;
+}
+
+.skill-tree li {
+    float: left;
+    text-align: center;
+    list-style-type: none;
+    position: relative;
+    padding: 20px 5px 0 5px;
+    transition: all 0.5s;
+}
+
+.skill-tree li::before, .skill-tree li::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 50%;
+    border-top: 1px solid #a0a0a0;
+    width: 50%;
+    height: 20px;
+}
+
+.skill-tree li::after {
+    right: auto;
+    left: 50%;
+    border-left: 1px solid #a0a0a0;
+}
+
+.skill-tree li:only-child::after, .skill-tree li:only-child::before {
+    display: none;
+}
+
+.skill-tree li:only-child {
+    padding-top: 0;
+}
+
+.skill-tree li:first-child::before, .skill-tree li:last-child::after {
+    border: 0 none;
+}
+
+.skill-tree li:last-child::before {
+    border-right: 1px solid #a0a0a0;
+    border-radius: 0 5px 0 0;
+}
+
+.skill-tree li:first-child::after {
+    border-radius: 5px 0 0 0;
+}
+
+.skill-tree ul ul::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    border-left: 1px solid #a0a0a0;
+    width: 0;
+    height: 20px;
+}
+
+.skill-node {
+    border: 1px solid #a0a0a0;
+    padding: 5px 10px;
+    text-decoration: none;
+    color: #a0a0a0;
+    font-size: 11px;
+    display: inline-block;
+    border-radius: 5px;
+    transition: all 0.5s;
+    background-color: #1a1a2e;
+    min-width: 150px;
+    max-width: 250px;
+}
+
+.skill-node h3 {
+    margin: 0;
+    padding: 0;
+    font-size: 14px;
+    color: #ff6b6b;
+}
+
+.skill-node p {
+    margin: 5px 0 0 0;
+    padding: 0;
+}
+
+.skill-node:hover, .skill-node:hover+ul li .skill-node {
+    background: #2a2a3e;
+    color: #fff;
+    border: 1px solid #ff6b6b;
+}
+
+.skill-node:hover+ul li::after, 
+.skill-node:hover+ul li::before, 
+.skill-node:hover+ul::before, 
+.skill-node:hover+ul ul::before {
+    border-color: #ff6b6b;
+}
+
+.root {
+    background-color: #2a2a3e;
+}
+
+.considered {
+    background-color: #1a1a2e;
+    opacity: 0.7;
+}
+
+.branch-end::before {
+    border-right: 1px solid #a0a0a0;
+    border-radius: 0 5px 0 0;
+}
+
+.branch-end::after {
+    display: none;
+}
+
+/* Adjustments for better representation of levels and forks */
+.skill-tree > ul > li > ul {
+    display: flex;
+    justify-content: center;
+}
+
+.skill-tree > ul > li > ul > li {
+    flex: 1;
+}
+
+.skill-tree ul ul ul {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.skill-tree ul ul ul li {
+    width: 100%;
+}
+
+.skill-tree ul ul ul ul {
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.skill-tree ul ul ul ul li {
+    width: auto;
+}
